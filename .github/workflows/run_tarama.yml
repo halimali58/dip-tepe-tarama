@@ -1,0 +1,36 @@
+name: Dip Tepe Tarama
+
+on:
+  schedule:
+    - cron: '0 16 * * 1-5'  # 16:00 UTC = 19:00 Turkey time, Mon-Fri
+
+jobs:
+  run-tarama:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install yfinance pandas numpy openpyxl
+
+    - name: Run tarama script
+      env:
+        EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+      run: python dip_tepe_tarama.py
+
+    - name: Upload Excel file
+      uses: actions/upload-artifact@v4
+      with:
+        name: tarama-results
+        path: Dip_Tepe_Tarama_Tum_Zamanlar_*.xlsx
