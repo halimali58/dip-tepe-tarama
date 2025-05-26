@@ -1,8 +1,9 @@
-name: Dip Tepe Tarama 
+name: Dip Tepe Tarama
 
 on:
   schedule:
     - cron: '0 16 * * 1-5'  # 16:00 UTC = 19:00 Turkey time, Mon-Fri
+  workflow_dispatch:  # Adds manual trigger option
 
 jobs:
   run-tarama:
@@ -20,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install yfinance pandas numpy openpyxl
+        pip install yfinance pandas numpy openpyxl schedule pytz
 
     - name: Run tarama script
       env:
